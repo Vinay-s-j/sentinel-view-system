@@ -1,4 +1,3 @@
-
 import { useEffect, useRef } from 'react';
 import { Map as MapIcon, Navigation } from 'lucide-react';
 import { useBotStore } from '@/store/botStore';
@@ -26,28 +25,42 @@ export const MapPanel = () => {
     // Initialize map
     mapRef.current = L.map(mapContainerRef.current).setView([location.lat, location.lng], 15);
 
-    // Add tile layer
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '© OpenStreetMap contributors'
+    // Add vector-style tile layer optimized for surveillance/outdoor use
+    L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors, Tiles courtesy of Humanitarian OpenStreetMap Team',
+      maxZoom: 19,
+      subdomains: ['a', 'b', 'c']
     }).addTo(mapRef.current);
 
-    // Create custom bot icon
+    // Alternative vector-style layer for better contrast
+    // You can uncomment this and comment the above for a different style
+    // L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+    //   attribution: '© OpenStreetMap contributors, © OpenTopoMap (CC-BY-SA)',
+    //   maxZoom: 17
+    // }).addTo(mapRef.current);
+
+    // Create custom bot icon with better visibility
     const botIcon = L.divIcon({
       className: 'custom-bot-marker',
       html: `
         <div class="relative">
-          <div class="w-6 h-6 bg-blue-500 rounded-full border-2 border-white shadow-lg animate-pulse"></div>
-          <div class="absolute -top-1 -right-1 w-2 h-2 bg-green-400 rounded-full"></div>
+          <div class="w-8 h-8 bg-red-500 rounded-full border-3 border-white shadow-2xl animate-pulse flex items-center justify-center">
+            <div class="w-3 h-3 bg-white rounded-full"></div>
+          </div>
+          <div class="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full border border-white"></div>
+          <div class="absolute top-8 left-1/2 transform -translate-x-1/2 bg-black/80 text-white text-xs px-2 py-1 rounded whitespace-nowrap">
+            DRISHTI Bot
+          </div>
         </div>
       `,
-      iconSize: [24, 24],
-      iconAnchor: [12, 12]
+      iconSize: [32, 32],
+      iconAnchor: [16, 16]
     });
 
     // Add bot marker
     markerRef.current = L.marker([location.lat, location.lng], { icon: botIcon })
       .addTo(mapRef.current)
-      .bindPopup('DRISHTI Bot<br/>Status: Active');
+      .bindPopup('DRISHTI Surveillance Bot<br/>Status: Active<br/>Signal: Strong');
 
     return () => {
       if (mapRef.current) {
@@ -71,10 +84,11 @@ export const MapPanel = () => {
     if (pathHistory.length > 1) {
       const pathCoords = pathHistory.map(pos => [pos.lat, pos.lng] as [number, number]);
       pathRef.current = L.polyline(pathCoords, {
-        color: '#3b82f6',
-        weight: 3,
-        opacity: 0.7,
-        smoothFactor: 1
+        color: '#ef4444',
+        weight: 4,
+        opacity: 0.8,
+        smoothFactor: 1,
+        dashArray: '10, 5'
       }).addTo(mapRef.current);
     }
 
@@ -100,7 +114,7 @@ export const MapPanel = () => {
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
             <MapIcon className="h-5 w-5 text-blue-400" />
-            <h3 className="text-lg font-semibold text-white">2D Navigation Map</h3>
+            <h3 className="text-lg font-semibold text-white">Vector Navigation Map</h3>
           </div>
           
           <button
