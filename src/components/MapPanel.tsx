@@ -25,42 +25,28 @@ export const MapPanel = () => {
     // Initialize map
     mapRef.current = L.map(mapContainerRef.current).setView([location.lat, location.lng], 15);
 
-    // Add vector-style tile layer optimized for surveillance/outdoor use
-    L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
-      attribution: '© OpenStreetMap contributors, Tiles courtesy of Humanitarian OpenStreetMap Team',
-      maxZoom: 19,
-      subdomains: ['a', 'b', 'c']
+    // Add Google Maps-like tile layer
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors',
+      maxZoom: 19
     }).addTo(mapRef.current);
 
-    // Alternative vector-style layer for better contrast
-    // You can uncomment this and comment the above for a different style
-    // L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
-    //   attribution: '© OpenStreetMap contributors, © OpenTopoMap (CC-BY-SA)',
-    //   maxZoom: 17
-    // }).addTo(mapRef.current);
-
-    // Create custom bot icon with better visibility
+    // Create simple bot marker similar to Google Maps
     const botIcon = L.divIcon({
       className: 'custom-bot-marker',
       html: `
-        <div class="relative">
-          <div class="w-8 h-8 bg-red-500 rounded-full border-3 border-white shadow-2xl animate-pulse flex items-center justify-center">
-            <div class="w-3 h-3 bg-white rounded-full"></div>
-          </div>
-          <div class="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full border border-white"></div>
-          <div class="absolute top-8 left-1/2 transform -translate-x-1/2 bg-black/80 text-white text-xs px-2 py-1 rounded whitespace-nowrap">
-            DRISHTI Bot
-          </div>
+        <div class="w-6 h-6 bg-blue-500 rounded-full border-2 border-white shadow-lg flex items-center justify-center">
+          <div class="w-2 h-2 bg-white rounded-full"></div>
         </div>
       `,
-      iconSize: [32, 32],
-      iconAnchor: [16, 16]
+      iconSize: [24, 24],
+      iconAnchor: [12, 12]
     });
 
     // Add bot marker
     markerRef.current = L.marker([location.lat, location.lng], { icon: botIcon })
       .addTo(mapRef.current)
-      .bindPopup('DRISHTI Surveillance Bot<br/>Status: Active<br/>Signal: Strong');
+      .bindPopup('DRISHTI Bot<br/>Status: Active');
 
     return () => {
       if (mapRef.current) {
@@ -84,11 +70,10 @@ export const MapPanel = () => {
     if (pathHistory.length > 1) {
       const pathCoords = pathHistory.map(pos => [pos.lat, pos.lng] as [number, number]);
       pathRef.current = L.polyline(pathCoords, {
-        color: '#ef4444',
-        weight: 4,
+        color: '#4285f4',
+        weight: 3,
         opacity: 0.8,
-        smoothFactor: 1,
-        dashArray: '10, 5'
+        smoothFactor: 1
       }).addTo(mapRef.current);
     }
 
@@ -109,44 +94,42 @@ export const MapPanel = () => {
   };
 
   return (
-    <div className="bg-slate-800/50 backdrop-blur-sm rounded-2xl border border-blue-500/20 shadow-2xl hover:border-blue-400/40 transition-all duration-300 h-full">
-      <div className="p-4 border-b border-slate-700/50">
+    <div className="bg-white rounded-lg border border-gray-200 shadow-sm h-full">
+      <div className="p-4 border-b border-gray-200">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            <MapIcon className="h-5 w-5 text-blue-400" />
-            <h3 className="text-lg font-semibold text-white">Vector Navigation Map</h3>
+            <MapIcon className="h-5 w-5 text-gray-600" />
+            <h3 className="text-lg font-medium text-gray-900">Map</h3>
           </div>
           
           <button
             onClick={centerOnBot}
-            className="flex items-center space-x-1 px-3 py-1 bg-blue-500/20 hover:bg-blue-500/30 rounded-lg transition-colors"
+            className="flex items-center space-x-1 px-3 py-1 bg-blue-50 hover:bg-blue-100 rounded-md transition-colors border border-blue-200"
           >
-            <Navigation className="h-4 w-4 text-blue-400" />
-            <span className="text-sm text-blue-300">Center</span>
+            <Navigation className="h-4 w-4 text-blue-600" />
+            <span className="text-sm text-blue-600">Center</span>
           </button>
         </div>
       </div>
       
       <div className="p-4 h-[calc(100%-5rem)]">
-        <div className="relative h-full rounded-xl overflow-hidden border border-slate-700/30">
+        <div className="relative h-full rounded-md overflow-hidden border border-gray-200">
           <div ref={mapContainerRef} className="w-full h-full" />
           
           {!isConnected && (
-            <div className="absolute inset-0 bg-slate-900/80 flex items-center justify-center">
+            <div className="absolute inset-0 bg-white/90 flex items-center justify-center">
               <div className="text-center">
-                <MapIcon className="h-12 w-12 text-slate-600 mx-auto mb-4" />
-                <p className="text-slate-400">Map Offline</p>
-                <p className="text-sm text-slate-500 mt-2">
+                <MapIcon className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                <p className="text-gray-600">Map Offline</p>
+                <p className="text-sm text-gray-500 mt-2">
                   Waiting for GPS signal...
                 </p>
               </div>
             </div>
           )}
           
-          <div className="absolute bottom-4 left-4 bg-black/70 px-3 py-1 rounded-lg">
-            <span className="text-xs text-white">
-              Lat: {location.lat.toFixed(6)} • Lng: {location.lng.toFixed(6)}
-            </span>
+          <div className="absolute bottom-2 left-2 bg-white/90 px-2 py-1 rounded text-xs text-gray-600 shadow-sm">
+            {location.lat.toFixed(6)}, {location.lng.toFixed(6)}
           </div>
         </div>
       </div>
