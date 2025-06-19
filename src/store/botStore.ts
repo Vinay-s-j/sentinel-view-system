@@ -29,7 +29,7 @@ interface BotState {
 
 export const useBotStore = create<BotState>((set, get) => ({
   isConnected: true,
-  location: { lat: 40.7128, lng: -74.0060 },
+  location: { lat: 12.9716, lng: 77.5946 }, // Bangalore coordinates
   telemetry: {
     battery: 85,
     cpuUsage: 45,
@@ -44,7 +44,7 @@ export const useBotStore = create<BotState>((set, get) => ({
   initializeBot: () => {
     set({
       isConnected: true,
-      pathHistory: [{ lat: 40.7128, lng: -74.0060 }]
+      pathHistory: [{ lat: 12.9716, lng: 77.5946 }] // Initialize with Bangalore coordinates
     });
   },
 

@@ -21,15 +21,15 @@ export const MapPanel = () => {
   const objectsLayerRef = useRef<L.LayerGroup | null>(null);
   const mapContainerRef = useRef<HTMLDivElement>(null);
 
-  // SLAM objects simulation data
+  // SLAM objects simulation data for Bangalore area
   const slamObjects = [
-    { lat: 40.7130, lng: -74.0058, type: 'obstacle', size: 'large' },
-    { lat: 40.7126, lng: -74.0062, type: 'wall', size: 'medium' },
-    { lat: 40.7132, lng: -74.0055, type: 'obstacle', size: 'small' },
-    { lat: 40.7125, lng: -74.0065, type: 'feature', size: 'small' },
-    { lat: 40.7135, lng: -74.0050, type: 'wall', size: 'large' },
-    { lat: 40.7120, lng: -74.0070, type: 'obstacle', size: 'medium' },
-    { lat: 40.7138, lng: -74.0045, type: 'feature', size: 'small' },
+    { lat: 12.9722, lng: 77.5946, type: 'obstacle', size: 'large' },
+    { lat: 12.9718, lng: 77.5950, type: 'wall', size: 'medium' },
+    { lat: 12.9726, lng: 77.5943, type: 'obstacle', size: 'small' },
+    { lat: 12.9717, lng: 77.5953, type: 'feature', size: 'small' },
+    { lat: 12.9729, lng: 77.5940, type: 'wall', size: 'large' },
+    { lat: 12.9714, lng: 77.5958, type: 'obstacle', size: 'medium' },
+    { lat: 12.9732, lng: 77.5937, type: 'feature', size: 'small' },
   ];
 
   useEffect(() => {
