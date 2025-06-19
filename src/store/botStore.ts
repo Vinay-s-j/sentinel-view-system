@@ -29,7 +29,7 @@ interface BotState {
 
 export const useBotStore = create<BotState>((set, get) => ({
   isConnected: true,
-  location: { lat: 12.9716, lng: 77.5946 }, // Bangalore coordinates
+  location: { lat: 12.9134, lng: 77.5204 }, // Rajarajeshwari Nagar, Bangalore coordinates
   telemetry: {
     battery: 85,
     cpuUsage: 45,
@@ -44,7 +44,7 @@ export const useBotStore = create<BotState>((set, get) => ({
   initializeBot: () => {
     set({
       isConnected: true,
-      pathHistory: [{ lat: 12.9716, lng: 77.5946 }] // Initialize with Bangalore coordinates
+      pathHistory: [{ lat: 12.9134, lng: 77.5204 }] // Initialize with Rajarajeshwari Nagar coordinates
     });
   },
 

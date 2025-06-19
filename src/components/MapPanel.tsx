@@ -21,15 +21,15 @@ export const MapPanel = () => {
   const objectsLayerRef = useRef<L.LayerGroup | null>(null);
   const mapContainerRef = useRef<HTMLDivElement>(null);
 
-  // SLAM objects simulation data for Bangalore area
+  // SLAM objects simulation data for Rajarajeshwari Nagar area
   const slamObjects = [
-    { lat: 12.9722, lng: 77.5946, type: 'obstacle', size: 'large' },
-    { lat: 12.9718, lng: 77.5950, type: 'wall', size: 'medium' },
-    { lat: 12.9726, lng: 77.5943, type: 'obstacle', size: 'small' },
-    { lat: 12.9717, lng: 77.5953, type: 'feature', size: 'small' },
-    { lat: 12.9729, lng: 77.5940, type: 'wall', size: 'large' },
-    { lat: 12.9714, lng: 77.5958, type: 'obstacle', size: 'medium' },
-    { lat: 12.9732, lng: 77.5937, type: 'feature', size: 'small' },
+    { lat: 12.9140, lng: 77.5204, type: 'obstacle', size: 'large' },
+    { lat: 12.9136, lng: 77.5208, type: 'wall', size: 'medium' },
+    { lat: 12.9144, lng: 77.5201, type: 'obstacle', size: 'small' },
+    { lat: 12.9135, lng: 77.5211, type: 'feature', size: 'small' },
+    { lat: 12.9147, lng: 77.5198, type: 'wall', size: 'large' },
+    { lat: 12.9132, lng: 77.5216, type: 'obstacle', size: 'medium' },
+    { lat: 12.9150, lng: 77.5195, type: 'feature', size: 'small' },
   ];
 
   useEffect(() => {

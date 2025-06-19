@@ -27,8 +27,8 @@ const Index = () => {
 
     const locationInterval = setInterval(() => {
       updateLocation({
-        lat: 12.9716 + (Math.random() - 0.5) * 0.01, // Bangalore area simulation
-        lng: 77.5946 + (Math.random() - 0.5) * 0.01
+        lat: 12.9134 + (Math.random() - 0.5) * 0.01, // Rajarajeshwari Nagar area simulation
+        lng: 77.5204 + (Math.random() - 0.5) * 0.01
       });
     }, 3000);
 
