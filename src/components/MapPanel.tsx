@@ -18,7 +18,19 @@ export const MapPanel = () => {
   const mapRef = useRef<L.Map | null>(null);
   const markerRef = useRef<L.Marker | null>(null);
   const pathRef = useRef<L.Polyline | null>(null);
+  const objectsLayerRef = useRef<L.LayerGroup | null>(null);
   const mapContainerRef = useRef<HTMLDivElement>(null);
+
+  // SLAM objects simulation data
+  const slamObjects = [
+    { lat: 40.7130, lng: -74.0058, type: 'obstacle', size: 'large' },
+    { lat: 40.7126, lng: -74.0062, type: 'wall', size: 'medium' },
+    { lat: 40.7132, lng: -74.0055, type: 'obstacle', size: 'small' },
+    { lat: 40.7125, lng: -74.0065, type: 'feature', size: 'small' },
+    { lat: 40.7135, lng: -74.0050, type: 'wall', size: 'large' },
+    { lat: 40.7120, lng: -74.0070, type: 'obstacle', size: 'medium' },
+    { lat: 40.7138, lng: -74.0045, type: 'feature', size: 'small' },
+  ];
 
   useEffect(() => {
     if (!mapContainerRef.current || mapRef.current) return;
@@ -35,6 +47,39 @@ export const MapPanel = () => {
       maxZoom: 20,
       subdomains: 'abcd'
     }).addTo(mapRef.current);
+
+    // Create SLAM objects layer
+    objectsLayerRef.current = L.layerGroup().addTo(mapRef.current);
+
+    // Add SLAM objects
+    slamObjects.forEach((obj, index) => {
+      const size = obj.size === 'large' ? 12 : obj.size === 'medium' ? 8 : 6;
+      const color = obj.type === 'obstacle' ? '#ef4444' : 
+                   obj.type === 'wall' ? '#f97316' : '#10b981';
+      
+      const objectIcon = L.divIcon({
+        className: 'slam-object-marker',
+        html: `
+          <div class="relative">
+            <div class="w-${size/2} h-${size/2} bg-${color === '#ef4444' ? 'red' : color === '#f97316' ? 'orange' : 'green'}-500 rounded-full border border-gray-300 shadow-lg opacity-80"></div>
+            <div class="absolute inset-0 bg-${color === '#ef4444' ? 'red' : color === '#f97316' ? 'orange' : 'green'}-500/20 rounded-full animate-pulse"></div>
+          </div>
+        `,
+        iconSize: [size + 4, size + 4],
+        iconAnchor: [(size + 4) / 2, (size + 4) / 2]
+      });
+
+      const marker = L.marker([obj.lat, obj.lng], { icon: objectIcon });
+      marker.bindPopup(`
+        <div class="text-xs bg-gray-800 text-white p-2 rounded">
+          <strong>SLAM Object #${index + 1}</strong><br>
+          Type: ${obj.type.toUpperCase()}<br>
+          Size: ${obj.size.toUpperCase()}<br>
+          Coords: ${obj.lat.toFixed(6)}, ${obj.lng.toFixed(6)}
+        </div>
+      `);
+      objectsLayerRef.current?.addLayer(marker);
+    });
 
     // Create SLAM-style bot marker
     const botIcon = L.divIcon({
@@ -144,6 +189,10 @@ export const MapPanel = () => {
           
           <div className="absolute top-2 left-2 bg-gray-800/90 px-2 py-1 rounded text-xs text-green-400 font-mono border border-gray-600">
             SLAM: ACTIVE
+          </div>
+
+          <div className="absolute top-2 right-2 bg-gray-800/90 px-2 py-1 rounded text-xs text-yellow-400 font-mono border border-gray-600">
+            Objects: {slamObjects.length}
           </div>
         </div>
       </div>
